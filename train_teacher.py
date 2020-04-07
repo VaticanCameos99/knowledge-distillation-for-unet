@@ -18,14 +18,14 @@ def evaluate(teacher, val_loader):
     ll = []
     with torch.no_grad():
         for i,(img,gt) in enumerate(val_loader):
-            img = img[0, :, :, :, :]
-            gt = gt[0,:, :, :, :]
             if torch.cuda.is_available():
                 img, gt = img.cuda(), gt.cuda()
             img, gt = Variable(img), Variable(gt)
 
             output = teacher(img)
-            loss = criterion(output, gt)
+            output = output.clamp(min = 0, max = 1)
+            gt = gt.clamp(min = 0, max = 1)
+            loss = dice_loss(output, gt)
             ll.append(loss.item())
 
     
@@ -39,14 +39,16 @@ def train(teacher, optimizer, train_loader):
     criterion = nn.BCEWithLogitsLoss()
     ll = []
     for i, (img, gt) in enumerate(train_loader):
-        img = img[0, :, :, :, :]
-        gt = gt[0,:, :, :, :]
+        print('i', i)
         if torch.cuda.is_available():
             img, gt = img.cuda(), gt.cuda()
         
         img, gt = Variable(img), Variable(gt)
+
         output = teacher(img)
-        loss = criterion(output, gt)
+        output = output.clamp(min = 0, max = 1)
+        gt = gt.clamp(min = 0, max = 1)
+        loss = dice_loss(output, gt)
         ll.append(loss.item())
         
         optimizer.zero_grad()
@@ -68,8 +70,8 @@ if __name__ == "__main__":
     #load teacher and student model
 
     #NV: add val folder
-    train_list = glob.glob('/home/nirvi/NIO/diabetic-20200318T171807Z-001/diabetic/images/*.jpg')
-    val_list = glob.glob('/home/nirvi/NIO/diabetic-20200318T171807Z-001/diabetic/test_images/*.jpg')
+    train_list = glob.glob('/home/nirvi/Internship_2020/Carvana dataset/train/train1/*jpg')
+    val_list = glob.glob('/home/nirvi/Internship_2020/Carvana dataset/val/val1/*jpg')
 
     tf = transforms.Compose([
         transforms.ToTensor(),
@@ -103,6 +105,6 @@ if __name__ == "__main__":
 
         #if val_metric is best, add checkpoint
 
-        torch.save(teacher.state_dict(), 'checkpoints_bce/CP{}.pth'.format(epoch+1))
+        torch.save(teacher.state_dict(), 'teacher_checkpoints/32/CP_32_{}.pth'.format(epoch+1))
         print("Checkpoint {} saved!".format(epoch+1))
         scheduler.step()
