@@ -5,11 +5,11 @@ An implementation of Knowledge distillation for segmentation, to train a small (
 ## Results:
 Dataset: [Carvana Image Masking Challenge](https://www.kaggle.com/c/carvana-image-masking-challenge)
 
-###Models trained without knowledge distillation
+#### Models trained without knowledge distillation
 
 ![Models trained without knowledge distillation](https://github.com/VaticanCameos99/knowledge-distillation-for-unet/blob/master/without%20knowledge%20distillation.png?raw=true)
 
-###Models trained with knowledge distillation
+#### Models trained with knowledge distillation
 
 ![Models trained with knowledge distillation](https://github.com/VaticanCameos99/knowledge-distillation-for-unet/blob/master/with%20knowledge%20distillation.jpeg?raw=true)
 
