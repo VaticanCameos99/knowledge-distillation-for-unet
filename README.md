@@ -1,6 +1,6 @@
 # Knowledge Distillation for UNet
 
-An implementation of Knowledge distillation for segmentation, to train a small (student) UNet from a larger (teacher) UNet thereby reducing the size of the network and while achieving performance similar to the heavier model.
+An implementation of Knowledge distillation for segmentation, to train a small (student) UNet from a larger (teacher) UNet thereby reducing the size of the network while achieving performance similar to the heavier model.
 
 ## Results:
 Dataset: [Carvana Image Masking Challenge](https://www.kaggle.com/c/carvana-image-masking-challenge)
